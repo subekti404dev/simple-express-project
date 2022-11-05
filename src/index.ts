@@ -1,13 +1,22 @@
 import express, { Express, Request, Response } from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
 import dotenv from "dotenv";
+import v1Routes from "./routes/v1";
+import staticAuth from "./middlewares/static-auth.routes";
 dotenv.config();
 
 const app: Express = express();
 const port = process.env.PORT || 7000;
 
+app.use(cors());
+app.use(bodyParser.json());
+
 app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
+  res.send("OK");
 });
+
+app.use("/v1", staticAuth, v1Routes);
 
 app.listen(port, () => {
   console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
